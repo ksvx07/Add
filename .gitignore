@@ -1,0 +1,99 @@
+# ---------------------------
+# Unity 기본
+# ---------------------------
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Bb]in/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+sysinfo.txt
+
+# (중요) 다음 폴더/파일은 "커밋해야" 합니다.
+#  - Assets/ (에셋과 *.meta 필수)
+#  - ProjectSettings/
+#  - Packages/ (manifest.json, packages-lock.json)
+# 절대 *.meta 를 무시하지 마세요!
+
+# ---------------------------
+# 에디터/IDE
+# ---------------------------
+# Visual Studio
+.vs/
+*.csproj
+*.sln
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# JetBrains Rider
+.idea/
+*.DotSettings.user
+
+# VS Code
+.vscode/
+
+# Unity 구버전/생성물
+*.pidb
+*.booproj
+*.unityproj
+
+# ---------------------------
+# 플랫폼별 빌드 산출물
+# ---------------------------
+# Android
+*.apk
+*.aab
+*.obb
+*.keystore
+*.jks
+.gradle/
+gradle/
+ExportedProject/
+
+# iOS / Xcode
+*.ipa
+*.xcuserstate
+*.xcscmblueprint
+xcuserdata/
+DerivedData/
+Pods/
+*.xcworkspace/
+
+# WebGL 빌드
+[Bb]uilds/WebGL*/
+
+# Addressables 빌드 결과(원하는 경우 추적 해제)
+# 빌드 산출물만 제외하고, 설정/그룹 에셋은 추적하세요.
+Assets/StreamingAssets/aa/
+
+# ---------------------------
+# 충돌/리포트/캐시 등
+# ---------------------------
+CrashReports/
+*.stacktrace
+*.dmp
+
+# ---------------------------
+# 운영체제 잡파일
+# ---------------------------
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.Trash-*

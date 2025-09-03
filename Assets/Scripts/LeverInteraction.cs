@@ -9,6 +9,23 @@ public class LeverInteraction : MonoBehaviour
     private bool canInteract = false;
     private bool isPulled = false;
 
+    [SerializeField] private GameObject pressEText;
+
+    void Awake()
+    {
+        GameManager.Instance.OnStageStart += Initialize;
+        GameManager.Instance.OnStageRestart += Initialize;
+    }
+
+    public void Initialize()
+    {
+        canInteract = false;
+        isPulled = false;
+        pressEText.SetActive(false);
+
+        leverAnimator.SetTrigger("Reset");
+    }
+
     void Update()
     {
         if (canInteract && !isPulled && Input.GetKeyUp(KeyCode.E))
@@ -18,30 +35,26 @@ public class LeverInteraction : MonoBehaviour
     }
     void PullLever()
     {
-        Debug.Log("레버를 당겼습니다.");
         isPulled = true;
 
+        leverAnimator.ResetTrigger("Reset");
         leverAnimator.SetTrigger("Pull");
         doorAnimator.SetTrigger("Open");
-
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            canInteract = true;
-            Debug.Log("플레이어가 레버 범위에 들어왔습니다.");
-        }
+        if (other.CompareTag(GameConstant.playerTag) == false) return;
+
+        canInteract = true;
+        pressEText.SetActive(true);
     }
 
-    private void OnTriggerExit(Collider other) {
-        if (other.CompareTag("Player"))
-        {
-            canInteract = false ;
-            Debug.Log("플레이어가 레버 범위에서 나갔습니다.");
-        }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag(GameConstant.playerTag) == false) return;
 
+        canInteract = false;
+        pressEText.SetActive(false);
     }
-
 }

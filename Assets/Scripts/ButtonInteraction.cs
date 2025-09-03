@@ -1,52 +1,57 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ButtonInteraction : MonoBehaviour
 {
-    public Animator buttonAnimator;
-
+    [SerializeField] private GameObject spike;
+    private Animator animator => GetComponent<Animator>();
     private bool isPressed = false;
-
     private bool canInteract = false;
+
+    void Awake()
+    {
+        GameManager.Instance.OnStageStart += Initialize;
+        GameManager.Instance.OnStageRestart += Initialize;
+    }
+
+    public void Initialize()
+    {
+        isPressed = false;
+        canInteract = false;
+        animator.SetTrigger("Reset");
+
+        if (GameManager.stage < GameConstant.buttonStage) return;
+        spike.SetActive(true);
+    }
 
     private void Update()
     {
-        if( canInteract && !isPressed && Input.GetKeyDown(KeyCode.E))
-        {
-            PressButton();
-        }
+        if (Input.GetKeyDown(KeyCode.E)) PressButton();
     }
     void PressButton()
     {
-        Debug.Log("버튼이 눌렸습니다.");
+        if (isPressed || !canInteract) return;
+
         isPressed = true;
 
-        if (buttonAnimator != null)
+        animator.ResetTrigger("Reset");
+        animator.SetTrigger("Press");
+
+        if (GameManager.stage < GameConstant.buttonStage)
         {
-            buttonAnimator.SetTrigger("Press");
+            PlayerController.Instance.Die();
+            return;
         }
 
-        GameManager.Instance.Restart();
-
+        spike.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            canInteract = true;
-            Debug.Log("플레이어가 버튼 범위에 들어왔습니다.");
-        }
+        if (other.CompareTag(GameConstant.playerTag)) canInteract = true;
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            canInteract = false;
-            Debug.Log("플레이어가 버튼 범위에서 나갔습니다.");
-        }
+        if (other.CompareTag(GameConstant.playerTag)) canInteract = false;
     }
-
-
 }

@@ -16,7 +16,7 @@ public class PlayerController : SingletonObject<PlayerController>
 
     protected override void Awake()
     {
-        GameManager.Instance.OnGameReset += Reset;
+        GameManager.Instance.OnGameRestart += Restart;
     }
 
     void Update()
@@ -58,7 +58,7 @@ public class PlayerController : SingletonObject<PlayerController>
 
         rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
 
-        if (transform.position.y < -10) GameManager.Instance.Reset();
+        if (transform.position.y < -10) GameManager.Instance.Restart();
         if (GameManager.stage < GameConstant.playerDieWhenStopStage) return;
 
         if (moveDir == Vector3.zero) stopTimer -= Time.deltaTime;
@@ -68,7 +68,7 @@ public class PlayerController : SingletonObject<PlayerController>
             stopTimer = GameConstant.playerDieTimer;
         }
 
-        if (stopTimer <= 0 && hasBeenMove == true) GameManager.Instance.Reset();
+        if (stopTimer <= 0 && hasBeenMove == true) GameManager.Instance.Restart();
     }
 
     private void Jump()
@@ -112,7 +112,7 @@ public class PlayerController : SingletonObject<PlayerController>
         }
     }
 
-    public void Reset()
+    public void Restart()
     {
         Initialize();
         transform.position = savePoint;

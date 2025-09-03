@@ -6,16 +6,23 @@ public class UIMAnager : SingletonObject<UIMAnager>
 {
     [SerializeField] private ShowStageNamePanel showStageNamePanel;
     [SerializeField] private TextMeshProUGUI resetCountText;
-    public void StartStage(int stage)
+    public static int resetCount;
+
+    protected override void Awake()
     {
-        ShowStageName(stage);
+        base.Awake();
+        resetCount = 0;
+        GameManager.Instance.OnGameRestart += UpdateResetCount;
     }
-    public void ShowStageName(int stage)
+
+    public void StartStage(int stage)
     {
         showStageNamePanel.ShowStageName(GameConstant.stageName[stage]);
     }
+
     public void UpdateResetCount()
     {
-        resetCountText.text = "X " + GameManager.resetCount;
+        resetCount++;
+        resetCountText.text = "X " + resetCount;
     }
 }

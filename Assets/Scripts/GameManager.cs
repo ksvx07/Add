@@ -6,11 +6,8 @@ public class GameManager : SingletonObject<GameManager>
     public static int stage;
     public static bool isPlaying = false;
     public static bool isClear = false;
-    private float playTime;
     public static bool canMove = true;
-    public event Action OnGameReset;
     public event Action OnGameRestart;
-    public static int resetCount;
 
     void Start()
     {
@@ -21,7 +18,6 @@ public class GameManager : SingletonObject<GameManager>
     {
         LockCursor(true);
         stage = 1;
-        resetCount = 0;
     }
 
     private void LockCursor(bool locked)
@@ -46,10 +42,8 @@ public class GameManager : SingletonObject<GameManager>
 
     }
 
-    public void Reset()
+    public void Restart()
     {
-        resetCount++;
-        UIMAnager.Instance.UpdateResetCount();
-        PlayerController.Instance.Reset();
+        OnGameRestart?.Invoke();
     }
 }

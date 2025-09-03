@@ -126,13 +126,13 @@ public class PlayerController : SingletonObject<PlayerController>
     public void Restart()
     {
         Initialize();
-
-        rb.linearVelocity = Vector3.zero;
         transform.position = savePoint;
     }
 
     public void Initialize()
     {
+        rb.linearVelocity = Vector3.zero;
+
         jumpLimitCount = GameConstant.playerJumpLimitCount;
         stopTimer = GameConstant.playerDieTimer;
         hasBeenMove = false;

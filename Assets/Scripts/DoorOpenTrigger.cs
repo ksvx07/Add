@@ -9,11 +9,10 @@ public class DoorOpenTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player") && !hasTrigged)
+        if (other.CompareTag("Player") && !hasTrigged)
         {
-            Debug.Log("플레이어가 문 열림 영역에 들어왔습니다.");
-
             doorAnimator.SetTrigger("Open");
+            GameManager.Instance.StartStage();
 
             hasTrigged = true;
         }

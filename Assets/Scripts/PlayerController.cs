@@ -1,3 +1,5 @@
+using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class PlayerController : SingletonObject<PlayerController>
@@ -6,23 +8,38 @@ public class PlayerController : SingletonObject<PlayerController>
     private Rigidbody rb => GetComponent<Rigidbody>();
     private bool isGrounded = false;
     public int jumpCount = GameConstant.maxJumpCount;
-    private Vector3 savePoint;
+    private int jumpLimitCount = GameConstant.playerJumpLimitCount;
+    [SerializeField] private GameObject jumpLimitCountText;
+    [SerializeField] private Vector3 savePoint = new Vector3(0, 1, 0);
+    private float stopTimer;
+    private bool hasBeenMove;
 
     protected override void Awake()
     {
-        //Mingku87_GameManager.Instance.OnGameReset += Reset;
+        GameManager.Instance.OnGameReset += Reset;
     }
 
     void Update()
     {
         if (GameManager.canMove == false) return;
 
+        LookForward();
         Move();
         Jump();
         ApplyGravity();
+
+        if (Input.GetKeyDown(KeyCode.L)) GameManager.Instance.StartStage();
     }
 
-    void Move()
+    private void LookForward()
+    {
+        Vector3 dir = Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up);
+        if (dir.sqrMagnitude < 0.01f) return;
+        quaternion target = Quaternion.LookRotation(dir, Vector3.up);
+        transform.rotation = Quaternion.Slerp(transform.rotation, target, 50 * Time.deltaTime);
+    }
+
+    private void Move()
     {
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveZ = Input.GetAxisRaw("Vertical");
@@ -41,17 +58,32 @@ public class PlayerController : SingletonObject<PlayerController>
 
         rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
 
-        Debug.Log(rb.linearVelocity);
+        if (transform.position.y < -10) GameManager.Instance.Reset();
+        if (GameManager.stage < GameConstant.playerDieWhenStopStage) return;
+
+        if (moveDir == Vector3.zero) stopTimer -= Time.deltaTime;
+        else
+        {
+            hasBeenMove = true;
+            stopTimer = GameConstant.playerDieTimer;
+        }
+
+        if (stopTimer <= 0 && hasBeenMove == true) GameManager.Instance.Reset();
     }
 
     private void Jump()
     {
         if (jumpCount == 0) return;
+        if (jumpLimitCount == 0) return;
         if (Input.GetKeyDown(KeyCode.Space) == false) return;
 
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, GameConstant.playerJumpForce, rb.linearVelocity.z);
         jumpCount--;
         isGrounded = false;
+
+        if (GameManager.stage < GameConstant.playerJumpLimitStage) return;
+        jumpLimitCount--;
+        jumpLimitCountText.GetComponent<TextMeshPro>().text = jumpLimitCount.ToString();
     }
 
     void ApplyGravity()
@@ -80,6 +112,16 @@ public class PlayerController : SingletonObject<PlayerController>
         }
     }
 
-    public void Reset() => transform.position = savePoint;
-    public void SetSavePoint(Vector3 savePoint) => this.savePoint = savePoint;
+    public void Reset()
+    {
+        Initialize();
+        transform.position = savePoint;
+    }
+
+    public void Initialize()
+    {
+        jumpLimitCount = GameConstant.playerJumpLimitCount;
+        stopTimer = GameConstant.playerDieTimer;
+        hasBeenMove = false;
+    }
 }

@@ -10,7 +10,7 @@ public class GameManager : SingletonObject<GameManager>
     public static bool canMove = true;
     public event Action OnGameReset;
     public event Action OnGameRestart;
-    private int resetCount;
+    public static int resetCount;
 
     void Start()
     {
@@ -20,12 +20,36 @@ public class GameManager : SingletonObject<GameManager>
     public void Initialize()
     {
         LockCursor(true);
-        stage = 0;
+        stage = 1;
+        resetCount = 0;
     }
 
     private void LockCursor(bool locked)
     {
         Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None;
         Cursor.visible = !locked;
+    }
+
+    public void ClearStage()
+    {
+        stage++;
+        if (stage == 10) ClearGame();
+    }
+
+    public void StartStage()
+    {
+        UIMAnager.Instance.StartStage(stage);
+    }
+
+    public void ClearGame()
+    {
+
+    }
+
+    public void Reset()
+    {
+        resetCount++;
+        UIMAnager.Instance.UpdateResetCount();
+        PlayerController.Instance.Reset();
     }
 }

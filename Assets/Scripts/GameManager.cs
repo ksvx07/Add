@@ -1,8 +1,9 @@
 using System;
 using UnityEngine;
 
-public class Mingku87_GameManager : Mingku87_SingletonObject<Mingku87_GameManager>
+public class GameManager : SingletonObject<GameManager>
 {
+    public static int stage;
     public static bool isPlaying = false;
     public static bool isClear = false;
     private float playTime;
@@ -19,6 +20,7 @@ public class Mingku87_GameManager : Mingku87_SingletonObject<Mingku87_GameManage
     public void Initialize()
     {
         LockCursor(true);
+        stage = 0;
     }
 
     private void LockCursor(bool locked)

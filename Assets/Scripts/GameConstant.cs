@@ -1,4 +1,4 @@
-public static class Mingku87_GameConstant
+public static class GameConstant
 {
     public static string playerTag = "Player";
     public static string groundTag = "Ground";

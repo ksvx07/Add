@@ -1,89 +1,85 @@
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : SingletonObject<PlayerController>
 {
-    private CharacterController characterController;
-
-    public float walkSpeed = 12.0f;
-    public float gravity = -9.81f;
-    public float jumpVelocity = 5f;
-
-    public Vector3 velocity;
-    
-    public Transform groundCheck;
-    public float groundDistance = 0.1f;
-    public LayerMask groundMask;
-
-    public float groundBuffer;
-    private float groundBufferSet = 0.25f;
-    private float jumpKeyBuffer;
-    private float jumpKeyBufferSet = 0.1f;
+    private Transform cameraTransform => CameraMove.Instance.transform;
+    private Rigidbody rb => GetComponent<Rigidbody>();
     private bool isGrounded = false;
+    public int jumpCount = GameConstant.maxJumpCount;
+    private Vector3 savePoint;
 
-    public Vector3 respawnPosition;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected override void Awake()
     {
-        characterController = gameObject.GetComponent<CharacterController>();
-        respawnPosition = transform.position;
+        //Mingku87_GameManager.Instance.OnGameReset += Reset;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // check ground
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        groundBuffer = isGrounded ? groundBufferSet : groundBuffer - Time.deltaTime;
+        if (GameManager.canMove == false) return;
 
-        if (isGrounded && velocity.y < 0)
+        Move();
+        Jump();
+        ApplyGravity();
+    }
+
+    void Move()
+    {
+        float moveX = Input.GetAxisRaw("Horizontal");
+        float moveZ = Input.GetAxisRaw("Vertical");
+
+        Vector3 forward = cameraTransform.forward;
+        Vector3 right = cameraTransform.right;
+
+        forward.y = 0f;
+        right.y = 0f;
+
+        forward.Normalize();
+        right.Normalize();
+
+        Vector3 moveDir = (forward * moveZ + right * moveX).normalized;
+        Vector3 velocity = moveDir * GameConstant.playerSpeed;
+
+        rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
+
+        Debug.Log(rb.linearVelocity);
+    }
+
+    private void Jump()
+    {
+        if (jumpCount == 0) return;
+        if (Input.GetKeyDown(KeyCode.Space) == false) return;
+
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, GameConstant.playerJumpForce, rb.linearVelocity.z);
+        jumpCount--;
+        isGrounded = false;
+    }
+
+    void ApplyGravity()
+    {
+        if (isGrounded == true) return;
+
+        float multiplier = rb.linearVelocity.y > 0 ?
+            GameConstant.playerGravityMultiplier : GameConstant.playerFallMultiplier;
+        rb.linearVelocity += Vector3.up * Physics.gravity.y * multiplier * Time.deltaTime;
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag(GameConstant.groundTag))
         {
-            velocity.y = 0;
+            isGrounded = true;
+            jumpCount = GameConstant.maxJumpCount;
         }
+    }
 
-        // move
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
-
-        Vector3 moveDirection = transform.right * horizontalInput + transform.forward * verticalInput;
-
-        characterController.Move(moveDirection * walkSpeed * Time.deltaTime);
-
-        // jump
-        jumpKeyBuffer = Input.GetButtonDown("Jump") ? jumpKeyBufferSet : jumpKeyBuffer - Time.deltaTime;
-
-        if (jumpKeyBuffer > 0 && groundBuffer > 0)
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag(GameConstant.groundTag))
         {
-            velocity.y = jumpVelocity;
             isGrounded = false;
-            groundBuffer = 0;
-            jumpKeyBuffer = 0;
-        }
-
-        velocity.y += gravity * Time.deltaTime;
-
-        characterController.Move(velocity * Time.deltaTime);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("DeathTrigger"))
-        {
-            LolYouAreDead();
-        }
-        
-        if (other.gameObject.CompareTag("CheckPointTrigger"))
-        {
-            respawnPosition = other.gameObject.transform.position;
         }
     }
 
-    public void LolYouAreDead()
-    {
-        // not big surprise
-        characterController.enabled = false;
-        transform.position = respawnPosition;
-        characterController.enabled = true;
-    }
+    public void Reset() => transform.position = savePoint;
+    public void SetSavePoint(Vector3 savePoint) => this.savePoint = savePoint;
 }

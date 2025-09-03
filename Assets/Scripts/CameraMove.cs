@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class Mingku87_Camera : Mingku87_SingletonObject<Mingku87_Camera>
+public class CameraMove : SingletonObject<CameraMove>
 {
     private Vector3 offset = new Vector3(0, 5, -5);
-    private Transform target => Mingku87_PlayerController.Instance.transform;
+    private Transform target => PlayerController.Instance.transform;
 
     private const float sensitivity = 3f;
 
@@ -20,7 +20,7 @@ public class Mingku87_Camera : Mingku87_SingletonObject<Mingku87_Camera>
 
     void LateUpdate()
     {
-        if (Mingku87_GameManager.canMove == false) return;
+        if (GameManager.canMove == false) return;
 
         Move();
     }

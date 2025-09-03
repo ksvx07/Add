@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Mingku87_SingletonObject<T> : MonoBehaviour where T : MonoBehaviour
+public class SingletonObject<T> : MonoBehaviour where T : MonoBehaviour
 {
     protected static T _instance;
     public static T Instance

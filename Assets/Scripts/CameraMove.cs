@@ -39,7 +39,7 @@ public class CameraMove : SingletonObject<CameraMove>
         Ray ray = new Ray(target.position, desiredPosition - target.position);
         Debug.DrawLine(target.position, desiredPosition, Color.red);
         RaycastHit hitInfo;
-        if (Physics.Raycast(ray, out hitInfo,(target.position - desiredPosition).magnitude))
+        if (Physics.Raycast(ray, out hitInfo, (target.position - desiredPosition).magnitude))
         {
             desiredPosition = hitInfo.point;
         }

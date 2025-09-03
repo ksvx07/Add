@@ -51,9 +51,9 @@ public class GameManager : SingletonObject<GameManager>
     {
         UIMAnager.Instance.FadeOut();
         canMove = false;
-        await Task.Delay(750);
+        await Task.Delay(UIMAnager.fadeOutTime / 2);
         OnStageRestart?.Invoke();
-        await Task.Delay(750);
+        await Task.Delay(UIMAnager.fadeOutTime / 2);
         canMove = true;
     }
 }

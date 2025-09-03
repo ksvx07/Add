@@ -7,8 +7,11 @@ public class UIMAnager : SingletonObject<UIMAnager>
     [SerializeField] private ShowStageNamePanel showStageNamePanel;
     [SerializeField] private TextMeshProUGUI resetCountText;
     [SerializeField] private GameObject fadeOut;
+    private Animator fadeOutAnimator => fadeOut.GetComponent<Animator>();
     public static bool isFadeOutWorking = false;
     public static int resetCount;
+    public static int fadeOutTime;
+
 
     protected override void Awake()
     {
@@ -16,6 +19,8 @@ public class UIMAnager : SingletonObject<UIMAnager>
         resetCount = 0;
         GameManager.Instance.OnStageStart += StartStage;
         GameManager.Instance.OnStageRestart += Reset;
+        foreach (AnimationClip clip in fadeOutAnimator.runtimeAnimatorController.animationClips)
+            if (clip.name == "FadeOut") fadeOutTime = (int)(clip.length / fadeOutAnimator.speed * 1000);
     }
 
     public void StartStage()
@@ -34,9 +39,9 @@ public class UIMAnager : SingletonObject<UIMAnager>
         if (isFadeOutWorking) return;
 
         isFadeOutWorking = true;
-        fadeOut.GetComponent<Animator>().SetTrigger("FadeOut");
+        fadeOutAnimator.SetTrigger("FadeOut");
 
-        await Task.Delay(1500);
+        await Task.Delay(fadeOutTime);
         isFadeOutWorking = false;
     }
 }

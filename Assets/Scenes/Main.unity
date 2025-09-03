@@ -553,6 +553,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 6.37
       objectReference: {fileID: 0}
+    - target: {fileID: 6585161741971704855, guid: 4b2c0995e11b4ee43a0f6d06e1b6b32a, type: 3}
+      propertyPath: exitDoorAnimator
+      value: 
+      objectReference: {fileID: 250422648}
+    - target: {fileID: 6585161741971704855, guid: 4b2c0995e11b4ee43a0f6d06e1b6b32a, type: 3}
+      propertyPath: enterDoorAnimator
+      value: 
+      objectReference: {fileID: 145581511}
     - target: {fileID: 7408473481454300787, guid: 4b2c0995e11b4ee43a0f6d06e1b6b32a, type: 3}
       propertyPath: m_LocalPosition.y
       value: 6.37

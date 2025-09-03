@@ -4,7 +4,8 @@ public class LeverInteraction : MonoBehaviour
 {
 
     public Animator leverAnimator;
-    public Animator doorAnimator;
+    public Animator enterDoorAnimator;
+    public Animator exitDoorAnimator;
 
     private bool canInteract = false;
     private bool isPulled = false;
@@ -39,7 +40,9 @@ public class LeverInteraction : MonoBehaviour
 
         leverAnimator.ResetTrigger("Reset");
         leverAnimator.SetTrigger("Pull");
-        doorAnimator.SetTrigger("Open");
+        enterDoorAnimator.SetTrigger("Close");
+        exitDoorAnimator.ResetTrigger("Close");
+        exitDoorAnimator.SetTrigger("Open");
     }
 
     private void OnTriggerEnter(Collider other)

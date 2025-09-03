@@ -11,7 +11,7 @@ public class TeleportToNextLevel : MonoBehaviour
     {
         if (other.CompareTag(GameConstant.playerTag))
         {
-            other.transform.position = other.transform.position + tpEnter.position - tpExit.position;
+            other.transform.position = other.transform.position - tpEnter.position + tpExit.position;
         }
     }
 }

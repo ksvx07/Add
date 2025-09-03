@@ -33,6 +33,11 @@ public class PlayerController : SingletonObject<PlayerController>
         ApplyGravity();
 
         if (Input.GetKeyDown(KeyCode.L)) GameManager.Instance.StartStage();
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            GameManager.Instance.ClearStage();
+            GameManager.Instance.StartStage();
+        }
     }
 
     private void LookForward()
@@ -121,6 +126,8 @@ public class PlayerController : SingletonObject<PlayerController>
     public void Restart()
     {
         Initialize();
+
+        rb.linearVelocity = Vector3.zero;
         transform.position = savePoint;
     }
 

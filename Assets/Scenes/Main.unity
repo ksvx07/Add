@@ -246,6 +246,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 10.48
       objectReference: {fileID: 0}
+    - target: {fileID: 5758802838365988825, guid: 47c2d22c0b39eed41890c0414a049d2f, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6477495980200323251, guid: 47c2d22c0b39eed41890c0414a049d2f, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -520,6 +524,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2565387344905814544, guid: 47c2d22c0b39eed41890c0414a049d2f, type: 3}
+      propertyPath: tpExit
+      value: 
+      objectReference: {fileID: 2005204111}
+    - target: {fileID: 2565387344905814544, guid: 47c2d22c0b39eed41890c0414a049d2f, type: 3}
+      propertyPath: tpEnter
+      value: 
+      objectReference: {fileID: 1568818177}
     - target: {fileID: 4467904055782532882, guid: 47c2d22c0b39eed41890c0414a049d2f, type: 3}
       propertyPath: m_Name
       value: Hall2
@@ -527,6 +539,10 @@ PrefabInstance:
     - target: {fileID: 4507304316226143582, guid: 47c2d22c0b39eed41890c0414a049d2f, type: 3}
       propertyPath: m_LocalPosition.z
       value: 10.48
+      objectReference: {fileID: 0}
+    - target: {fileID: 5758802838365988825, guid: 47c2d22c0b39eed41890c0414a049d2f, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -555,7 +571,7 @@ GameObject:
   - component: {fileID: 1296048251}
   - component: {fileID: 1296048250}
   - component: {fileID: 1296048253}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: DoorCloseTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -686,8 +702,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f886b1392fbb72468ff61c33f908956, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tpExit: {fileID: 1568818177}
-  tpEnter: {fileID: 2005204111}
 --- !u!1001 &1574108650
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -758,7 +772,7 @@ GameObject:
   - component: {fileID: 1769024439}
   - component: {fileID: 1769024438}
   - component: {fileID: 1769024441}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: DoorOpenTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}

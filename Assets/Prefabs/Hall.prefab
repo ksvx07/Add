@@ -404,10 +404,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4507304316226143582}
+  - component: {fileID: 2565387344905814544}
   - component: {fileID: 235402323711819956}
   - component: {fileID: 6572113415605828633}
   - component: {fileID: 1850811405132620811}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: TeleportPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -429,6 +430,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 891785580856873958}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2565387344905814544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5758802838365988825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00aecaa9efb86524cb207e284d6d492d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tpExit: {fileID: 0}
+  tpEnter: {fileID: 0}
 --- !u!33 &235402323711819956
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -838,6 +853,10 @@ PrefabInstance:
     - target: {fileID: 2380509907319505014, guid: a352c046922c4b64d98061eff184611c, type: 3}
       propertyPath: m_Name
       value: DoorCloseTrigger
+      objectReference: {fileID: 0}
+    - target: {fileID: 2380509907319505014, guid: a352c046922c4b64d98061eff184611c, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5141152882003337244, guid: a352c046922c4b64d98061eff184611c, type: 3}
       propertyPath: m_LocalScale.x

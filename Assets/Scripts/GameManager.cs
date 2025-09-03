@@ -47,8 +47,13 @@ public class GameManager : SingletonObject<GameManager>
 
     }
 
-    public void Restart()
+    async public void Restart()
     {
+        UIMAnager.Instance.FadeOut();
+        canMove = false;
+        await Task.Delay(UIMAnager.fadeOutTime / 2);
         OnStageRestart?.Invoke();
+        await Task.Delay(UIMAnager.fadeOutTime / 2);
+        canMove = true;
     }
 }

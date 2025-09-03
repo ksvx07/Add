@@ -11,10 +11,14 @@ public class SpikeController : MonoBehaviour
     {
         GameManager.Instance.OnStageStart += Initialize;
         GameManager.Instance.OnStageRestart += Initialize;
+
+        Initialize();
     }
 
     public void Initialize()
     {
+        if (GameManager.stage < GameConstant.startSpikeTrapStage) return;
+
         hasWork = false;
         animator.SetTrigger("ResetSpike");
 

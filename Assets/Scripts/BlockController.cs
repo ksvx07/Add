@@ -14,12 +14,16 @@ public enum BlockType
 public class BlockController : MonoBehaviour
 {
     [SerializeField] private List<BlockType> blockTypeByStage = new();
-    private Animator _animator => GetComponent<Animator>();
+    [SerializeField] private GameObject disappearTrigger;
+    [SerializeField] private GameObject moveTrigger;
+    private BlockType blockType => blockTypeByStage[GameManager.stage];
     private Vector3 startPos;
-    private float moveDistance = 2.0f;
+    private float moveDistance = 3.0f;
+    private bool hasTriggerWork;
 
     void Awake()
     {
+        GameManager.Instance.OnStageStart += Initialize;
         GameManager.Instance.OnStageRestart += Initialize;
         startPos = transform.position;
     }
@@ -27,18 +31,35 @@ public class BlockController : MonoBehaviour
     public void Initialize()
     {
         transform.position = startPos;
+        disappearTrigger.SetActive(blockType == BlockType.Disappear);
+        moveTrigger.SetActive(blockType == BlockType.MoveLeft || blockType == BlockType.MoveRight);
         gameObject.SetActive(true);
+        hasTriggerWork = false;
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player") == false) return;
-        if (blockTypeByStage[GameManager.stage] == BlockType.Disappear) gameObject.SetActive(false);
+        if (hasTriggerWork == true) return;
+
+        Disappear();
+        Move();
+    }
+
+    public void Disappear()
+    {
+        if (blockType != BlockType.Disappear) return;
+
+        hasTriggerWork = true;
+        gameObject.SetActive(false);
     }
 
     public void Move()
     {
-        float dis = blockTypeByStage[GameManager.stage] == BlockType.MoveLeft ? moveDistance : -moveDistance;
+        if (blockType == BlockType.None || blockType == BlockType.Disappear) return;
+
+        hasTriggerWork = true;
+        float dis = blockType == BlockType.MoveLeft ? moveDistance : -moveDistance;
         transform.DOMove(transform.position + Vector3.right * dis, 0.5f).SetEase(Ease.OutQuad);
     }
 }

@@ -3,6 +3,7 @@ using UnityEngine;
 public class SpikeController : MonoBehaviour
 {
     [SerializeField] private bool isLoop = false;
+    [SerializeField] private BoxCollider trigger;
     private bool hasWork;
     private Animator animator => GetComponent<Animator>();
 
@@ -17,14 +18,17 @@ public class SpikeController : MonoBehaviour
         hasWork = false;
         animator.SetTrigger("ResetSpike");
 
-        if (isLoop) animator.SetBool("isLoop", true);
+        trigger.enabled = !isLoop;
+        animator.SetBool("isLoop", isLoop);
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (isLoop == false || hasWork) return;
+        if (isLoop || hasWork) return;
         if (other.CompareTag(GameConstant.playerTag) == false) return;
 
+        hasWork = true;
+        trigger.enabled = false;
         animator.ResetTrigger("ResetSpike");
         animator.SetTrigger("SpikeMove");
     }

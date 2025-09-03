@@ -58564,6 +58564,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3121521133219849316}
     m_Modifications:
+    - target: {fileID: 722697930000438511, guid: 04e6c5da32b9d7f4faf334b4d026c7e8, type: 3}
+      propertyPath: isLoop
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5849516127612092630, guid: 04e6c5da32b9d7f4faf334b4d026c7e8, type: 3}
       propertyPath: m_Name
       value: SpikeTrapVisual

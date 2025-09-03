@@ -471,6 +471,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Room
       objectReference: {fileID: 0}
+    - target: {fileID: 7860023033763840283, guid: 4b2c0995e11b4ee43a0f6d06e1b6b32a, type: 3}
+      propertyPath: m_Size.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7860023033763840283, guid: 4b2c0995e11b4ee43a0f6d06e1b6b32a, type: 3}
+      propertyPath: m_Size.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7860023033763840283, guid: 4b2c0995e11b4ee43a0f6d06e1b6b32a, type: 3}
+      propertyPath: m_Size.z
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7860023033763840283, guid: 4b2c0995e11b4ee43a0f6d06e1b6b32a, type: 3}
+      propertyPath: m_Center.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7860023033763840283, guid: 4b2c0995e11b4ee43a0f6d06e1b6b32a, type: 3}
+      propertyPath: m_Center.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7860023033763840283, guid: 4b2c0995e11b4ee43a0f6d06e1b6b32a, type: 3}
+      propertyPath: m_Center.z
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

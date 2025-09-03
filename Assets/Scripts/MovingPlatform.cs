@@ -25,6 +25,7 @@ public class MovingPlatform : MonoBehaviour
         if (other.CompareTag(GameConstant.playerTag))
         {
             other.transform.SetParent(transform);
+
         }
     }
 

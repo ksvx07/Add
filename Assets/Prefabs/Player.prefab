@@ -229,7 +229,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpCount: 1
   jumpLimitCountText: {fileID: 1554360380787641432}
-  savePoint: {x: 0, y: 0, z: 0}
+  savePoint: {x: 0, y: 1, z: 0}
 --- !u!33 &6143293139760330410
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -290,7 +290,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8353268524042490575}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: c8c4564f4aa577e4f9bcf86ba1c2f459, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

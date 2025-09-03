@@ -16,18 +16,15 @@ public static class GameConstant
     public const string fakeTrigger = "Fake";
     public const string resetTrigger = "Reset";
 
-    public static List<string> stageName = new() { "Run",
-    "Run",
-    "Run",
-    "Run",
-    "Run",
-    "Run",
-    "Run",
-    "Run",
-    "Run",
-    "Run",
-    "Run",
-    "Run", };
+    public static List<string> stageName = new() {
+    "문어 게임",
+    "보안 시스템 가동",
+    "띵동",
+    "느려",
+    "안 움직이면 쏜다",
+    "깨시조아",
+    "층간소음",
+    "반전술식",};
 
     public const int playerJumpLimitStage = 2;
     public const int playerJumpLimitCount = 10;

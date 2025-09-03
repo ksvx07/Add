@@ -31,7 +31,7 @@ public class GameManager : SingletonObject<GameManager>
     public void ClearStage()
     {
         stage++;
-        if (stage == 10) ClearGame();
+        if (stage == GameConstant.stageName.Count) ClearGame();
     }
 
     async public void StartStage()

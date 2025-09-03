@@ -20,15 +20,13 @@ public class CameraMove : SingletonObject<CameraMove>
 
     void LateUpdate()
     {
-        if (GameManager.canMove == false) return;
-
         Move();
     }
 
     private void Move()
     {
-        float mouseX = Input.GetAxis("Mouse X") * sensitivity;
-        float mouseY = Input.GetAxis("Mouse Y") * sensitivity;
+        float mouseX = GameManager.canMove ? Input.GetAxis("Mouse X") * sensitivity : 0;
+        float mouseY = GameManager.canMove ? Input.GetAxis("Mouse Y") * sensitivity : 0;
 
         yaw += mouseX;
         pitch -= mouseY;

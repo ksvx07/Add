@@ -22,4 +22,5 @@ public static class GameConstant
     public const int playerJumpLimitCount = 10;
     public const int playerDieWhenStopStage = 4;
     public const float playerDieTimer = 0.3f;
+    public const int playerMoveFlipStage = 7;
 }

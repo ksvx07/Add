@@ -13,9 +13,12 @@ public class PlayerController : SingletonObject<PlayerController>
     [SerializeField] private Vector3 savePoint = new Vector3(0, 1, 0);
     private float stopTimer;
     private bool hasBeenMove;
+    private bool isMovingReverse = false;
 
     protected override void Awake()
     {
+        base.Awake();
+
         GameManager.Instance.OnStageStart += Initialize;
         GameManager.Instance.OnStageRestart += Restart;
     }
@@ -44,6 +47,8 @@ public class PlayerController : SingletonObject<PlayerController>
     {
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveZ = Input.GetAxisRaw("Vertical");
+
+        if (isMovingReverse == true) moveX *= -1;
 
         Vector3 forward = cameraTransform.forward;
         Vector3 right = cameraTransform.right;
@@ -127,5 +132,8 @@ public class PlayerController : SingletonObject<PlayerController>
 
         if (GameManager.stage < GameConstant.playerJumpLimitStage) return;
         jumpLimitCountText.SetActive(true);
+
+        if (GameManager.stage < GameConstant.playerMoveFlipStage) return;
+        isMovingReverse = true;
     }
 }

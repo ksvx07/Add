@@ -139,6 +139,7 @@ public class PlayerController : SingletonObject<PlayerController>
 
         if (GameManager.stage < GameConstant.playerJumpLimitStage) return;
         jumpLimitCountText.SetActive(true);
+        jumpLimitCountText.GetComponent<TextMeshPro>().text = jumpLimitCount.ToString();
 
         if (GameManager.stage < GameConstant.playerMoveFlipStage) return;
         isMovingReverse = true;

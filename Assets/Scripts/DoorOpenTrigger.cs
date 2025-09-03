@@ -1,12 +1,11 @@
 using UnityEngine;
 
-public class DoorOpenTrigger : MonoBehaviour
+public class DoorOpenTrigger : SingletonObject<DoorOpenTrigger>
 {
     public Animator doorAnimator;
+    public static bool hasTrigged = false;
 
-    private bool hasTrigged = false;
-
-    void Awake()
+    protected override void Awake()
     {
         GameManager.Instance.OnStageStart += Initialize;
         GameManager.Instance.OnStageRestart += Reset;
@@ -19,6 +18,7 @@ public class DoorOpenTrigger : MonoBehaviour
 
     public void Reset()
     {
+        hasTrigged = false;
         doorAnimator.SetTrigger("Close");
     }
 

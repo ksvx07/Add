@@ -58,7 +58,7 @@ public class BlockController : MonoBehaviour
         if (blockType == BlockType.None || blockType == BlockType.Disappear) return;
 
         hasTriggerWork = true;
-        float dis = blockType == BlockType.MoveLeft ? -moveDistance : moveDistance;
+        float dis = blockType == BlockType.MoveLeft ? moveDistance : -moveDistance;
         transform.DOMove(transform.position + Vector3.right * dis, 0.5f).SetEase(Ease.OutQuad);
     }
 }

@@ -31,6 +31,7 @@ public class GameManager : SingletonObject<GameManager>
     public void ClearStage()
     {
         stage++;
+        DoorOpenTrigger.hasTrigged = false;
         if (stage == GameConstant.stageName.Count) ClearGame();
     }
 

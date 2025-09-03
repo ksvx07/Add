@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class GameManager : SingletonObject<GameManager>
 {
@@ -7,7 +8,8 @@ public class GameManager : SingletonObject<GameManager>
     public static bool isPlaying = false;
     public static bool isClear = false;
     public static bool canMove = true;
-    public event Action OnGameRestart;
+    public event Action OnStageStart;
+    public event Action OnStageRestart;
 
     void Start()
     {
@@ -17,7 +19,7 @@ public class GameManager : SingletonObject<GameManager>
     public void Initialize()
     {
         LockCursor(true);
-        stage = 1;
+        stage = 0;
     }
 
     private void LockCursor(bool locked)
@@ -32,9 +34,12 @@ public class GameManager : SingletonObject<GameManager>
         if (stage == 10) ClearGame();
     }
 
-    public void StartStage()
+    async public void StartStage()
     {
-        UIMAnager.Instance.StartStage(stage);
+        canMove = false;
+        OnStageStart?.Invoke();
+        await Task.Delay(2000);
+        canMove = true;
     }
 
     public void ClearGame()
@@ -44,6 +49,6 @@ public class GameManager : SingletonObject<GameManager>
 
     public void Restart()
     {
-        OnGameRestart?.Invoke();
+        OnStageRestart?.Invoke();
     }
 }

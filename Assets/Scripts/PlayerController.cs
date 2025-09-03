@@ -16,7 +16,8 @@ public class PlayerController : SingletonObject<PlayerController>
 
     protected override void Awake()
     {
-        GameManager.Instance.OnGameRestart += Restart;
+        GameManager.Instance.OnStageStart += Initialize;
+        GameManager.Instance.OnStageRestart += Restart;
     }
 
     void Update()
@@ -123,5 +124,8 @@ public class PlayerController : SingletonObject<PlayerController>
         jumpLimitCount = GameConstant.playerJumpLimitCount;
         stopTimer = GameConstant.playerDieTimer;
         hasBeenMove = false;
+
+        if (GameManager.stage < GameConstant.playerJumpLimitStage) return;
+        jumpLimitCountText.SetActive(true);
     }
 }

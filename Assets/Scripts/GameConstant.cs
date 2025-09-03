@@ -16,10 +16,10 @@ public static class GameConstant
     public const string fakeTrigger = "Fake";
     public const string resetTrigger = "Reset";
 
-    public static List<string> stageName = new() { "", "Run", "rrr" };
+    public static List<string> stageName = new() { "Run", "rrr" };
 
-    public const int playerJumpLimitStage = 3;
+    public const int playerJumpLimitStage = 2;
     public const int playerJumpLimitCount = 10;
-    public const int playerDieWhenStopStage = 5;
+    public const int playerDieWhenStopStage = 4;
     public const float playerDieTimer = 0.3f;
 }

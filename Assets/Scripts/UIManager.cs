@@ -12,12 +12,13 @@ public class UIMAnager : SingletonObject<UIMAnager>
     {
         base.Awake();
         resetCount = 0;
-        GameManager.Instance.OnGameRestart += UpdateResetCount;
+        GameManager.Instance.OnStageStart += StartStage;
+        GameManager.Instance.OnStageRestart += UpdateResetCount;
     }
 
-    public void StartStage(int stage)
+    public void StartStage()
     {
-        showStageNamePanel.ShowStageName(GameConstant.stageName[stage]);
+        showStageNamePanel.ShowStageName(GameConstant.stageName[GameManager.stage]);
     }
 
     public void UpdateResetCount()

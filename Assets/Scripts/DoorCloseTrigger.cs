@@ -11,11 +11,9 @@ public class DoorCloseTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player") && !hasTriggered)
         {
-            Debug.Log("플레이어가 문 닫힘 영역에 들어왔습니다.");
-
+            GameManager.Instance.ClearStage();
             doorAnimator.SetTrigger("Close");
             hasTriggered = true;
         }
     }
-
 }

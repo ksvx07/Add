@@ -10,7 +10,7 @@ public class Mingku87_PlayerController : Mingku87_SingletonObject<Mingku87_Playe
 
     protected override void Awake()
     {
-        Mingku87_GameManager.Instance.OnGameReset += Reset;
+        //Mingku87_GameManager.Instance.OnGameReset += Reset;
     }
 
     void Update()
@@ -40,6 +40,8 @@ public class Mingku87_PlayerController : Mingku87_SingletonObject<Mingku87_Playe
         Vector3 velocity = moveDir * Mingku87_GameConstant.playerSpeed;
 
         rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
+
+        Debug.Log(rb.linearVelocity);
     }
 
     private void Jump()

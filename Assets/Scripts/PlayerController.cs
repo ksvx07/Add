@@ -64,7 +64,7 @@ public class PlayerController : SingletonObject<PlayerController>
 
         rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
 
-        if (transform.position.y < -10) GameManager.Instance.Restart();
+        if (transform.position.y < -10) Die();
         if (GameManager.stage < GameConstant.playerDieWhenStopStage) return;
 
         if (moveDir == Vector3.zero) stopTimer -= Time.deltaTime;
@@ -74,7 +74,7 @@ public class PlayerController : SingletonObject<PlayerController>
             stopTimer = GameConstant.playerDieTimer;
         }
 
-        if (stopTimer <= 0 && hasBeenMove == true) GameManager.Instance.Restart();
+        if (stopTimer <= 0 && hasBeenMove == true) Die();
     }
 
     private void Jump()
@@ -135,5 +135,10 @@ public class PlayerController : SingletonObject<PlayerController>
 
         if (GameManager.stage < GameConstant.playerMoveFlipStage) return;
         isMovingReverse = true;
+    }
+
+    public void Die()
+    {
+        GameManager.Instance.Restart();
     }
 }

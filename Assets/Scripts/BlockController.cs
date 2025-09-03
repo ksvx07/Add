@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using DG.Tweening;
 
@@ -39,7 +38,7 @@ public class BlockController : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") == false) return;
+        if (other.CompareTag(GameConstant.playerTag) == false) return;
         if (hasTriggerWork == true) return;
 
         Disappear();

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Ksvx07_PingPong : MonoBehaviour
+public class MovingPlatform : MonoBehaviour
 {
     public float moveDistance = 3f;
     public float moveSpeed = 2f;
@@ -19,4 +19,22 @@ public class Ksvx07_PingPong : MonoBehaviour
         float offset = Mathf.PingPong(Time.time * moveSpeed, moveDistance * 2) - moveDistance;
         transform.position = startPos + moveDir * offset;
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag(GameConstant.playerTag))
+        {
+            other.transform.SetParent(transform);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag(GameConstant.playerTag))
+        {
+            other.transform.SetParent(null);
+        }
+    }
+
+
 }

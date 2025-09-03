@@ -2006,7 +2006,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leverAnimator: {fileID: 7257311757121278279}
   doorAnimator: {fileID: 7108733365222492371}
-  pressEText: {fileID: 0}
+  pressEText: {fileID: 1426568057741719276}
 --- !u!1 &8642457671662578196
 GameObject:
   m_ObjectHideFlags: 0

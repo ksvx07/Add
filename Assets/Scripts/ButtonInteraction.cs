@@ -26,16 +26,8 @@ public class ButtonInteraction : MonoBehaviour
             buttonAnimator.SetTrigger("Press");
         }
 
-        GameObject player = GameObject.FindWithTag("Player");
-        if (player != null)
-        {
-            Debug.Log("플레이어를 죽입니다.");
-            player.SetActive(false); //게임 매니저에 맞는 함수로 수정
-        }
-        else
-        {
-            Debug.LogWarning("플레이어 태그를 가진 오브젝트를 찾을 수 없습니다.");
-        }
+        GameManager.Instance.Restart();
+
     }
 
     private void OnTriggerEnter(Collider other)

@@ -252,7 +252,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 150ea88dd4a598d4289ed9f2186a7820, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonAnimator: {fileID: 10273282088455472}
+  spike: {fileID: 0}
 --- !u!1 &8040829171406249619
 GameObject:
   m_ObjectHideFlags: 0

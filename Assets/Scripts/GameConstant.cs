@@ -27,10 +27,11 @@ public static class GameConstant
     "반전술식",};
 
     public const int startSpikeTrapStage = 1;
-    public const int playerJumpLimitStage = 2;
-    public const int playerJumpLimitCount = 10;
+    public const int buttonStage = 2;
     public const int playerDieWhenStopStage = 4;
     public const float playerDieTimer = 0.3f;
     public const int hiddenSpikeStage = 5;
+    public const int playerJumpLimitStage = 6;
+    public const int playerJumpLimitCount = 10;
     public const int playerMoveFlipStage = 7;
 }

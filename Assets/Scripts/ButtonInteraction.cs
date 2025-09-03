@@ -17,7 +17,6 @@ public class ButtonInteraction : MonoBehaviour
     {
         isPressed = false;
         canInteract = false;
-        animator.SetTrigger("Reset");
 
         if (GameManager.stage < GameConstant.buttonStage) return;
         spike.SetActive(true);
@@ -32,8 +31,6 @@ public class ButtonInteraction : MonoBehaviour
         if (isPressed || !canInteract) return;
 
         isPressed = true;
-
-        animator.ResetTrigger("Reset");
         animator.SetTrigger("Press");
 
         if (GameManager.stage < GameConstant.buttonStage)

@@ -1,3 +1,4 @@
+using System.Buffers;
 using UnityEngine;
 
 public class ButtonInteraction : MonoBehaviour
@@ -6,17 +7,22 @@ public class ButtonInteraction : MonoBehaviour
     private Animator animator => GetComponent<Animator>();
     private bool isPressed = false;
     private bool canInteract = false;
+    Material mat;
 
     void Awake()
     {
         GameManager.Instance.OnStageStart += Initialize;
         GameManager.Instance.OnStageRestart += Initialize;
+        mat = GetComponent<MeshRenderer>().material;
+
+        mat.color = Color.red;
     }
 
     public void Initialize()
     {
         isPressed = false;
         canInteract = false;
+        mat.color = Color.red;
 
         if (GameManager.stage < GameConstant.buttonStage) return;
         spike.SetActive(true);
@@ -32,7 +38,7 @@ public class ButtonInteraction : MonoBehaviour
 
         isPressed = true;
         animator.SetTrigger("Press");
-
+        mat.color = Color.green;
         if (GameManager.stage < GameConstant.buttonStage)
         {
             PlayerController.Instance.Die();

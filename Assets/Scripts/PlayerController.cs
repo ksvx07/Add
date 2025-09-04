@@ -74,8 +74,7 @@ public class PlayerController : SingletonObject<PlayerController>
 
         if (transform.position.y < -10) Die();
         if (GameManager.stage < GameConstant.playerDieWhenStopStage) return;
-
-        if (moveDir == Vector3.zero) stopTimer -= Time.deltaTime;
+        if (rb.linearVelocity.sqrMagnitude <= 0.1f) stopTimer -= Time.deltaTime;
         else
         {
             hasBeenMove = true;

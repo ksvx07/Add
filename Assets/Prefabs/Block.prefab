@@ -53,6 +53,7 @@ MonoBehaviour:
   blockTypeByStage: 000000000000000000000000000000000000000000000000000000000000000000000000
   disappearTrigger: {fileID: 5553653758881064226}
   moveTrigger: {fileID: 1755783675959906857}
+  brakeParticle: {fileID: 6240092392784489530, guid: 7078fc426b4c74e448f7af9dbbedc89f, type: 3}
 --- !u!33 &995090560511019856
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -164,7 +165,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3834201832349458318}
   - component: {fileID: 8080336124204797587}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: MoveTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -217,7 +218,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5109746808957015743}
   - component: {fileID: 2994627413050448546}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: DisappearTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}

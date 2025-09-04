@@ -20,6 +20,8 @@ public class BlockController : MonoBehaviour
     private float moveDistance = 3.0f;
     private bool hasTriggerWork;
 
+    [SerializeField] ParticleSystem brakeParticle;
+
     void Awake()
     {
         GameManager.Instance.OnStageStart += Initialize;
@@ -48,8 +50,8 @@ public class BlockController : MonoBehaviour
     public void Disappear()
     {
         if (blockType != BlockType.Disappear) return;
-
         hasTriggerWork = true;
+        Instantiate(brakeParticle, transform.position, Quaternion.identity);
         gameObject.SetActive(false);
     }
 

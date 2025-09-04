@@ -164,7 +164,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3834201832349458318}
   - component: {fileID: 8080336124204797587}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: MoveTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -217,7 +217,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5109746808957015743}
   - component: {fileID: 2994627413050448546}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: DisappearTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}

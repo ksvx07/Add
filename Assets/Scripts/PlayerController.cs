@@ -154,6 +154,7 @@ public class PlayerController : SingletonObject<PlayerController>
     {
         if (isDead) return;
 
+        rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
         isDead = true;
         GameManager.Instance.Restart();
     }

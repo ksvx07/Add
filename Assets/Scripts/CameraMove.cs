@@ -1,8 +1,10 @@
+using JetBrains.Annotations;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class CameraMove : SingletonObject<CameraMove>
 {
-    private Vector3 offset = new Vector3(0, 5, -5);
+    private Vector3 offset = new Vector3(0, 3, -3);
     private Transform target => PlayerController.Instance.transform;
 
     private const float sensitivity = 3f;
@@ -35,16 +37,21 @@ public class CameraMove : SingletonObject<CameraMove>
 
         pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
         desiredPosition = target.position + Quaternion.Euler(pitch, yaw, 0) * offset;
+        float maxDistanceCameraToPlayer = desiredPosition.magnitude;
 
         Ray ray = new Ray(target.position, desiredPosition - target.position);
         Debug.DrawLine(target.position, desiredPosition, Color.red);
         RaycastHit hitInfo;
-        if (Physics.Raycast(ray, out hitInfo, (target.position - desiredPosition).magnitude))
+        float rayCastLength = (target.position - desiredPosition).magnitude;
+        bool hasRayHit = Physics.Raycast(ray, out hitInfo, rayCastLength);
+        if (hasRayHit)
         {
             desiredPosition = hitInfo.point;
         }
 
         transform.position = desiredPosition;//target.position + Quaternion.Euler(pitch, yaw, 0) * offset;
-        transform.LookAt(target.position + Vector3.up * 1.5f);
+
+        float offsetAmount = hasRayHit ? hitInfo.distance / rayCastLength : 1.0f; // this returns infinite
+        transform.LookAt(target.position + (Vector3.up * (1.5f * offsetAmount)));
     }
 }

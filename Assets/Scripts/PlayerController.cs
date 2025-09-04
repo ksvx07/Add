@@ -14,6 +14,7 @@ public class PlayerController : SingletonObject<PlayerController>
     private float stopTimer;
     private bool hasBeenMove;
     private bool isMovingReverse = false;
+    private bool isDead;
 
     protected override void Awake()
     {
@@ -25,7 +26,7 @@ public class PlayerController : SingletonObject<PlayerController>
 
     void Update()
     {
-        if (GameManager.canMove == false) return;
+        if (GameManager.canMove == false || isDead) return;
 
         LookForward();
         Move();
@@ -136,6 +137,7 @@ public class PlayerController : SingletonObject<PlayerController>
         jumpLimitCount = GameConstant.playerJumpLimitCount;
         stopTimer = GameConstant.playerDieTimer;
         hasBeenMove = false;
+        isDead = false;
 
         if (GameManager.stage < GameConstant.playerJumpLimitStage) return;
         jumpLimitCountText.SetActive(true);
@@ -147,6 +149,9 @@ public class PlayerController : SingletonObject<PlayerController>
 
     public void Die()
     {
+        if (isDead) return;
+
+        isDead = true;
         GameManager.Instance.Restart();
     }
 }

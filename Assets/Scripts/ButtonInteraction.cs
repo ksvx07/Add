@@ -1,3 +1,4 @@
+using System.Buffers;
 using UnityEngine;
 
 public class ButtonInteraction : MonoBehaviour
@@ -32,7 +33,7 @@ public class ButtonInteraction : MonoBehaviour
 
         isPressed = true;
         animator.SetTrigger("Press");
-
+        GetComponent<MeshRenderer>().material.color = Color.green;
         if (GameManager.stage < GameConstant.buttonStage)
         {
             PlayerController.Instance.Die();

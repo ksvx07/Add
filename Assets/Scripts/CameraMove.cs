@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
@@ -9,6 +8,9 @@ public class CameraMove : SingletonObject<CameraMove>
 
     private const float sensitivity = 3f;
 
+    private float startYaw;
+    private float startPitch;
+
     private float yaw = 0f;
     private float pitch = 0f;
     private const float minPitch = -40f;
@@ -16,10 +18,20 @@ public class CameraMove : SingletonObject<CameraMove>
 
     Vector3 desiredPosition;
 
-    void Start()
+    protected override void Awake()
     {
-        yaw = transform.eulerAngles.y;
-        pitch = transform.eulerAngles.x;
+        base.Awake();
+
+        startYaw = transform.eulerAngles.y;
+        startPitch = transform.eulerAngles.x;
+
+        GameManager.Instance.OnStageRestart += Initialize;
+    }
+
+    public void Initialize()
+    {
+        yaw = startYaw;
+        pitch = startPitch;
     }
 
     void LateUpdate()

@@ -32,11 +32,13 @@ public class GameManager : SingletonObject<GameManager>
     {
         stage++;
         DoorOpenTrigger.hasTrigged = false;
-        if (stage == GameConstant.stageName.Count) ClearGame();
+        if (stage >= GameConstant.stageName.Count) ClearGame();
     }
 
     async public void StartStage()
     {
+        if (isClear) return;
+
         canMove = false;
         OnStageStart?.Invoke();
         await Task.Delay(2000);
@@ -45,7 +47,8 @@ public class GameManager : SingletonObject<GameManager>
 
     public void ClearGame()
     {
-
+        isClear = true;
+        Debug.Log("clear");
     }
 
     async public void Restart()

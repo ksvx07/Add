@@ -10,8 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8818621414442604712}
   - component: {fileID: 7005955377022395213}
-  - component: {fileID: 5733843701362308421}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: MovingPlatform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49,33 +48,6 @@ MonoBehaviour:
   moveDistance: 3
   moveSpeed: 2
   moveDir: {x: 1, y: 0, z: 0}
---- !u!54 &5733843701362308421
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3120804058558678531}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
 --- !u!1 &5832125438990251997
 GameObject:
   m_ObjectHideFlags: 0
@@ -88,7 +60,7 @@ GameObject:
   - component: {fileID: 479988155873307546}
   - component: {fileID: 2159720768973189926}
   - component: {fileID: 6192461408537038506}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -196,7 +168,8 @@ GameObject:
   - component: {fileID: 5523703461984189294}
   - component: {fileID: 2434673225018147496}
   - component: {fileID: 6513646487199411873}
-  m_Layer: 0
+  - component: {fileID: 4768166949479886412}
+  m_Layer: 7
   m_Name: MovingPlatform1 (4)
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -293,3 +266,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4768166949479886412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6599800003037360944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c9d1cb8802c32d4690677be5f986ba9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parent: {fileID: 3120804058558678531}

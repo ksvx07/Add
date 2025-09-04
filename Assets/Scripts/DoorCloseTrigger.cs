@@ -22,9 +22,11 @@ public class DoorCloseTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player") && !hasTriggered)
         {
-            GameManager.Instance.ClearStage();
             doorAnimator.SetTrigger("Close");
             hasTriggered = true;
+
+            if (GameManager.isClear) return;
+            GameManager.Instance.ClearStage();
         }
     }
 }

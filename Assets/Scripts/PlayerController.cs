@@ -14,6 +14,7 @@ public class PlayerController : SingletonObject<PlayerController>
     private float stopTimer;
     private bool hasBeenMove;
     private bool isMovingReverse = false;
+    private bool isDead;
 
     protected override void Awake()
     {
@@ -25,7 +26,7 @@ public class PlayerController : SingletonObject<PlayerController>
 
     void Update()
     {
-        if (GameManager.canMove == false) return;
+        if (GameManager.canMove == false || isDead) return;
 
         LookForward();
         Move();
@@ -53,7 +54,7 @@ public class PlayerController : SingletonObject<PlayerController>
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveZ = Input.GetAxisRaw("Vertical");
 
-        if (isMovingReverse == true) moveX *= -1;
+        if (isMovingReverse == true && GameManager.isClear == false) moveX *= -1;
 
         Vector3 forward = cameraTransform.forward;
         Vector3 right = cameraTransform.right;
@@ -68,6 +69,8 @@ public class PlayerController : SingletonObject<PlayerController>
         Vector3 velocity = moveDir * GameConstant.playerSpeed;
 
         rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
+
+        if (GameManager.isClear) return;
 
         if (transform.position.y < -10) Die();
         if (GameManager.stage < GameConstant.playerDieWhenStopStage) return;
@@ -92,6 +95,7 @@ public class PlayerController : SingletonObject<PlayerController>
         jumpCount--;
         isGrounded = false;
 
+        if (GameManager.isClear) return;
         if (GameManager.stage < GameConstant.playerJumpLimitStage) return;
         jumpLimitCount--;
         jumpLimitCountText.GetComponent<TextMeshPro>().text = jumpLimitCount.ToString();
@@ -136,6 +140,7 @@ public class PlayerController : SingletonObject<PlayerController>
         jumpLimitCount = GameConstant.playerJumpLimitCount;
         stopTimer = GameConstant.playerDieTimer;
         hasBeenMove = false;
+        isDead = false;
 
         if (GameManager.stage < GameConstant.playerJumpLimitStage) return;
         jumpLimitCountText.SetActive(true);
@@ -147,6 +152,9 @@ public class PlayerController : SingletonObject<PlayerController>
 
     public void Die()
     {
+        if (isDead) return;
+
+        isDead = true;
         GameManager.Instance.Restart();
     }
 }

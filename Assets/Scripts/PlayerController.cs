@@ -53,6 +53,7 @@ public class PlayerController : SingletonObject<PlayerController>
     {
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveZ = Input.GetAxisRaw("Vertical");
+        
 
         if (isMovingReverse == true && GameManager.isClear == false) moveX *= -1;
 

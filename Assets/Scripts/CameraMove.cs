@@ -3,7 +3,8 @@ using UnityEngine;
 public class CameraMove : SingletonObject<CameraMove>
 {
     private Vector3 offset = new Vector3(0, 3, -3);
-    private Transform target => PlayerController.Instance.transform;
+    [SerializeField]private Transform target;
+    //private Transform target => PlayerController.Instance.transform;
 
     private const float sensitivity = 3f;
 

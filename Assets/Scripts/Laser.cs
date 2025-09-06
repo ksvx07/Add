@@ -64,7 +64,8 @@ public class Laser : MonoBehaviour
             // 플레이어 감지
             if (hit.collider.CompareTag(GameConstant.playerTag))
             {
-                PlayerController.Instance.Die();
+                //PlayerController.Instance.Die();
+                Debug.Log("Die");
             }
         }
         else

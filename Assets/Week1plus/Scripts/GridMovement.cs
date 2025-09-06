@@ -18,12 +18,14 @@ public class GridMovement : MonoBehaviour
     private float elapsed = 0f;
     private Vector3 startPos;
     private Vector3 endPos;
+    private Gravity gravity;
 
     [SerializeField] private Transform roomPivot;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        gravity = GetComponent<Gravity>();
     }
 
     void Update()
@@ -51,6 +53,7 @@ public class GridMovement : MonoBehaviour
     IEnumerator Move(Vector3 direction)
     {
         isMoving = true;
+        gravity?.EnableGravity(false);
         Vector3 startPos = transform.position;
         Vector3 endPos = startPos + direction * gridSize;
 
@@ -64,6 +67,7 @@ public class GridMovement : MonoBehaviour
 
         rb.MovePosition(endPos); // 보정
         isMoving = false;
+        gravity?.EnableGravity(true);
     }
 
 
@@ -86,7 +90,7 @@ public class GridMovement : MonoBehaviour
         if (t >= 1f)
         {
             isJumping = false;
-            rb.useGravity = true; // 점프 끝나면 중력 복구
+            gravity?.EnableGravity(true); // 점프 끝나면 중력 켬
         }
     }
 
@@ -94,7 +98,7 @@ public class GridMovement : MonoBehaviour
     {
         isJumping = true;
         elapsed = 0f;
-        rb.useGravity = false; // 점프 중 중력 끄기
+        gravity?.EnableGravity(false); // 점프 중 중력 끄기
 
         startPos = rb.position;
         endPos = startPos + transform.forward * moveDistance;

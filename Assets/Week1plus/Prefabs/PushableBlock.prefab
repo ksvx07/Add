@@ -9,12 +9,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6201273758932851492}
+  - component: {fileID: -6946076974579463037}
+  - component: {fileID: -5957550970460350083}
   - component: {fileID: 8026386131251709244}
   - component: {fileID: 833124329633930631}
   - component: {fileID: 2096994244517427997}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PushableBlock
-  m_TagString: Ground
+  m_TagString: Pushable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -34,6 +36,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-6946076974579463037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6651522347088097544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 468b528cb87a7fc4590778a3fdbee4ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-5957550970460350083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6651522347088097544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a02c67c1a9accd47b74f853e10cc2a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gravitySpeed: 3
+  rayLength: 0.6
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!33 &8026386131251709244
 MeshFilter:
   m_ObjectHideFlags: 0

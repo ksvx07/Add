@@ -1,14 +1,11 @@
 using UnityEngine;
 using System.Collections;
-using Unity.VisualScripting;
 
 public class GridMovement : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public float gridSize = 1f;
     private bool isMoving = false;
-    private Rigidbody rb;
-
 
     [SerializeField] private float jumpHeight = 1f;   // 점프 최대 높이
     [SerializeField] private float jumpDuration = 0.5f; // 점프 시간
@@ -24,13 +21,12 @@ public class GridMovement : MonoBehaviour
 
     void Awake()
     {
-        rb = GetComponent<Rigidbody>();
         gravity = GetComponent<Gravity>();
     }
 
     void Update()
     {
-        if (!isMoving)
+        if (!isMoving && !isJumping)
         {
             if (Input.GetKeyDown(KeyCode.W)) StartCoroutine(Move(Vector3.forward));
             if (Input.GetKeyDown(KeyCode.S)) StartCoroutine(Move(Vector3.back));
@@ -38,7 +34,6 @@ public class GridMovement : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.D)) StartCoroutine(Move(Vector3.right));
         }
 
-        // 점프 중이면 입력 무시
         if (!isJumping && Input.GetKeyDown(KeyCode.Space))
         {
             StartJump();
@@ -50,22 +45,74 @@ public class GridMovement : MonoBehaviour
         }
     }
 
+    //IEnumerator Move(Vector3 direction)
+    //{
+    //    isMoving = true;
+    //    gravity?.EnableGravity(false);
+
+    //    Vector3 start = transform.position;
+    //    Vector3 end = start + direction * gridSize;
+
+    //    float elapsedTime = 0f;
+    //    while (elapsedTime < 1f)
+    //    {
+    //        transform.position = Vector3.Lerp(start, end, elapsedTime);
+    //        elapsedTime += Time.deltaTime * moveSpeed;
+    //        yield return null;
+    //    }
+
+    //    transform.position = end; // 보정
+    //    isMoving = false;
+    //    gravity?.EnableGravity(true);
+    //}
+
     IEnumerator Move(Vector3 direction)
     {
         isMoving = true;
         gravity?.EnableGravity(false);
-        Vector3 startPos = transform.position;
-        Vector3 endPos = startPos + direction * gridSize;
 
-        float elapsed = 0f;
-        while (elapsed < 1f)
+        Vector3 start = transform.position;
+        Vector3 end = start + direction * gridSize;
+
+        // 레이캐스트로 Pushable 체크
+        RaycastHit hit;
+        GameObject pushable = null;
+        if (Physics.Raycast(start, direction, out hit, gridSize))
         {
-            rb.MovePosition(Vector3.Lerp(startPos, endPos, elapsed));
-            elapsed += Time.deltaTime * moveSpeed;
+            if (hit.collider.CompareTag("Pushable"))
+            {
+                pushable = hit.collider.gameObject;
+            }
+        }
+
+        Vector3 pushableStart = Vector3.zero;
+        Vector3 pushableEnd = Vector3.zero;
+        if (pushable != null)
+        {
+            pushableStart = pushable.transform.position;
+            pushableEnd = pushableStart + direction * gridSize;
+        }
+
+        float elapsedTime = 0f;
+        while (elapsedTime < 1f)
+        {
+            float t = elapsedTime;
+
+            transform.position = Vector3.Lerp(start, end, t);
+
+            if (pushable != null)
+            {
+                pushable.transform.position = Vector3.Lerp(pushableStart, pushableEnd, t);
+            }
+
+            elapsedTime += Time.deltaTime * moveSpeed;
             yield return null;
         }
 
-        rb.MovePosition(endPos); // 보정
+        transform.position = end; // 플레이어 위치 보정
+        if (pushable != null)
+            pushable.transform.position = pushableEnd; // Pushable 위치 보정
+
         isMoving = false;
         gravity?.EnableGravity(true);
     }
@@ -81,11 +128,10 @@ public class GridMovement : MonoBehaviour
         // 포물선 계산: y = -4h*(t-0.5)^2 + h
         float y = (-4f * jumpHeight * (t - 0.5f) * (t - 0.5f) + jumpHeight);
 
-        // 선형으로 2칸 이동 + y 포물선
         Vector3 targetPos = Vector3.Lerp(startPos, endPos, t);
         targetPos.y += y;
 
-        rb.MovePosition(targetPos);
+        transform.position = targetPos;
 
         if (t >= 1f)
         {
@@ -98,9 +144,9 @@ public class GridMovement : MonoBehaviour
     {
         isJumping = true;
         elapsed = 0f;
-        gravity?.EnableGravity(false); // 점프 중 중력 끄기
+        gravity?.EnableGravity(false);
 
-        startPos = rb.position;
+        startPos = transform.position;
         endPos = startPos + transform.forward * moveDistance;
     }
 

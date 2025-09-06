@@ -9,6 +9,7 @@ TagManager:
   - CheckPointTrigger
   - Ground
   - Goal
+  - Pushable
   layers:
   - Default
   - TransparentFX

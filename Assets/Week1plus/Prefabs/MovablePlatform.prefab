@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 957078195325241432}
   m_Layer: 7
   m_Name: MovablePlatform
-  m_TagString: Untagged
+  m_TagString: Movable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47,8 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3555c0568039bfe47b36c65941689d56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
   gridSize: 1
+  rayMaxDis: 0.6
 --- !u!33 &1634687969985124612
 MeshFilter:
   m_ObjectHideFlags: 0

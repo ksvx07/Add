@@ -18,7 +18,7 @@ public class GameManager : SingletonObject<GameManager>
 
     public void Initialize()
     {
-        LockCursor(true);
+        //LockCursor(true);
         stage = 0;
     }
 

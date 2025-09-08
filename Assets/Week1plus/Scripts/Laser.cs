@@ -51,7 +51,7 @@ public class Laser : MonoBehaviour
 
     void ShootLaser()
     {
-        Vector3 startPos = transform.position;
+        Vector3 startPos = transform.position - transform.forward * 0.1f;
         Vector3 dir = transform.forward;
 
         RaycastHit hit;
@@ -65,7 +65,7 @@ public class Laser : MonoBehaviour
             if (hit.collider.CompareTag(GameConstant.playerTag))
             {
                 //PlayerController.Instance.Die();
-                Debug.Log("Die");
+                GameManager2.instance.Die();
             }
         }
         else

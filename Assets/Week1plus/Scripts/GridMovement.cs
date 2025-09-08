@@ -10,17 +10,19 @@ public class GridMovement : MonoBehaviour
     private Vector3 prePos = Vector3.zero;
     private Animator animator;
 
-    [SerializeField] private float moveDistance = 2f;  // 이동 거리 (2칸)
-
     [SerializeField] private float rayMaxDis = 0.6f;
-
-    [SerializeField] private Transform roomPivot;
 
     private bool dashReady;
     private float dashRayMaxDis = 5.0f;
     private bool dashing;
     private Vector3 dashPos = Vector3.zero;
     [SerializeField] private float dashSpeed = 5.0f;
+
+    [SerializeField] private Renderer playerRenderer;
+    [SerializeField] private Material normalMaterial;
+    [SerializeField] private Material dashMaterial;
+
+
 
     void Awake()
     {
@@ -36,21 +38,22 @@ public class GridMovement : MonoBehaviour
 
         if (!GameManager2.instance.busy)
         {
-            if (Input.GetKeyDown(KeyCode.W)) Move(0);
-            if (Input.GetKeyDown(KeyCode.S)) Move(180);
-            if (Input.GetKeyDown(KeyCode.A)) Move(270);
-            if (Input.GetKeyDown(KeyCode.D)) Move(90);
+            if (GameManager2.instance.keyW) Move(0);
+            if (GameManager2.instance.keyS) Move(180);
+            if (GameManager2.instance.keyA) Move(270);
+            if (GameManager2.instance.keyD) Move(90);
 
-            if (Input.GetKeyDown(KeyCode.E)) ReadyDash();
+            if (GameManager2.instance.thisLevel > 8)
+                if (GameManager2.instance.keyE) ReadyDash();
         }
         else
         {
             if (dashReady)
             {
-                if (Input.GetKeyDown(KeyCode.W)) Dash(0);
-                if (Input.GetKeyDown(KeyCode.S)) Dash(180);
-                if (Input.GetKeyDown(KeyCode.A)) Dash(270);
-                if (Input.GetKeyDown(KeyCode.D)) Dash(90);
+                if (GameManager2.instance.keyW) Dash(0);
+                if (GameManager2.instance.keyS) Dash(180);
+                if (GameManager2.instance.keyA) Dash(270);
+                if (GameManager2.instance.keyD) Dash(90);
             }
         }
 
@@ -78,6 +81,7 @@ public class GridMovement : MonoBehaviour
     {
         GameManager2.instance.StartAction();
         GameManager2.instance.EnableGravity(false);
+        playerRenderer.material = dashMaterial;
         dashReady = true;
     }
 
@@ -118,6 +122,7 @@ public class GridMovement : MonoBehaviour
     
     private void DashEnd()
     {
+        playerRenderer.material = normalMaterial;
         dashReady = false;
         dashing = false;
         GameManager2.instance.EnableGravity(true);
@@ -139,18 +144,36 @@ public class GridMovement : MonoBehaviour
         return dashDistance;
     }
 
-    private bool MoveRay()
+    private bool MoveRay(int moveDirRot)
     {
         Vector3 pos = transform.position;
         Vector3 upRayPos = pos + new Vector3(0f, 0.25f, 0f);
         Vector3 downRayPos = pos - new Vector3(0f, 0.25f, 0f);
         Vector3 topFrontRayPos = pos + new Vector3(0f, 0.75f, 0f);
 
-        if (Physics.Raycast(upRayPos, transform.forward, rayMaxDis) 
-            || Physics.Raycast(downRayPos, transform.forward, rayMaxDis)
+        RaycastHit hit1, hit2;
+        bool hitUp = Physics.Raycast(upRayPos, transform.forward, out hit1, rayMaxDis);
+        bool hitDown = Physics.Raycast(downRayPos, transform.forward, out hit2, rayMaxDis);
+
+        if (hitUp
+            || hitDown
             || Physics.Raycast(topFrontRayPos, transform.forward, rayMaxDis)
             || Physics.Raycast(pos, Vector3.up, rayMaxDis))
         {
+            if (hitUp && hitDown
+                && hit1.collider.CompareTag("Pushable")
+                && hit1.collider.gameObject == hit2.collider.gameObject) // 같은 오브젝트인지 확인
+            {
+                Transform parent2 = hit1.collider.transform.parent?.parent;
+                if (parent2 != null)
+                {
+                    PushableBlock block = parent2.GetComponent<PushableBlock>();
+                    if (block != null)
+                    {
+                        block.Pushed(moveDirRot);
+                    }
+                }
+            }
             return false;
         }
         else
@@ -161,6 +184,7 @@ public class GridMovement : MonoBehaviour
 
     private void Move(int moveDirRot)
     {
+        GameManager2.instance.StartAction();
         moveDir = moveDirRot switch
         {
             0 => Vector3.forward,
@@ -175,13 +199,12 @@ public class GridMovement : MonoBehaviour
         transform.rotation = Quaternion.Euler(euler);
 
         // 가능한지 확인
-        bool canMove = MoveRay();
+        bool canMove = MoveRay(moveDirRot);
 
         if (canMove)
         {
             prePos = transform.position;
             animator.SetTrigger("Forward");
-            GameManager2.instance.StartAction();
             GameManager2.instance.EnableGravity(false);
         }
         else
@@ -202,6 +225,8 @@ public class GridMovement : MonoBehaviour
 
     public void Blocked()
     {
+        GameManager2.instance.EndAction();
+        GameManager2.instance.EnableGravity(false);
         // Add Blocked animation
     }
 }

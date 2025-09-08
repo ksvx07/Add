@@ -1,36 +1,77 @@
 using UnityEngine;
-using System.Collections;
 
 public class MovablePlatform : MonoBehaviour
 {
-    public float moveSpeed = 2f;   // 이동 속도
+    private float moveSpeed = 5f;   // 이동 속도
     public float gridSize = 1f;    // 한 칸 크기
-    private bool isMoving = false; // 이동 중인지 체크
+    [SerializeField] private float rayMaxDis = 0.6f;
 
-    public void Move()
+    private bool isMoving;
+    private Vector3 targetPos = Vector3.zero;
+
+    private void Update()
     {
-        if (!isMoving)
-        {
-            StartCoroutine(MoveOneTile(Vector3.forward)); // 예시: 앞으로 한 칸
+        if (isMoving)
+        { 
+            Move();
+            checkMoving();
         }
     }
 
-    private IEnumerator MoveOneTile(Vector3 direction)
+    private void Move()
     {
-        isMoving = true;
+        transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
+    }
 
-        Vector3 startPos = transform.position;
-        Vector3 endPos = startPos + direction * gridSize;
-
-        float elapsed = 0f;
-        while (elapsed < 1f)
+    private void checkMoving()
+    {
+        if (Vector3.Distance(transform.position, targetPos) < 0.001f)
         {
-            transform.position = Vector3.Lerp(startPos, endPos, elapsed);
-            elapsed += Time.deltaTime * moveSpeed;
-            yield return null;
+            isMoving = false;
+            GameManager2.instance.EndAction();
+            GameManager2.instance.EnableGravity(true);
+        }
+    }
+
+    private bool MoveRay()
+    {
+        Vector3 pos = transform.position;
+        Vector3 upRayPos = pos + new Vector3(0f, 0.25f, 0f);
+        Vector3 downRayPos = pos - new Vector3(0f, 0.25f, 0f);
+
+        if (Physics.Raycast(upRayPos, transform.forward, rayMaxDis)
+            || Physics.Raycast(downRayPos, transform.forward, rayMaxDis))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    public void MoveStart()
+    {
+        bool canMove = MoveRay();
+
+        if (canMove)
+        {
+            GameManager2.instance.StartAction();
+            GameManager2.instance.EnableGravity(false);
+            targetPos = transform.position + Vector3.forward;
+            isMoving = true; 
+        }
+        else
+        {
+            Blocked();
         }
 
-        transform.position = endPos; // 정확히 끝 위치 보정
-        isMoving = false;
+    }
+
+    private void Blocked()
+    {
+
     }
 }
+
+

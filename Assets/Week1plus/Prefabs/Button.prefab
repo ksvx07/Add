@@ -154,4 +154,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   platforms:
-  - {fileID: 0}
+  - {fileID: 260422756978509315, guid: 16ca09f3c84e949458cdf77b3834c218, type: 3}
+  child: {fileID: 0}

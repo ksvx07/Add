@@ -10,6 +10,7 @@ TagManager:
   - Ground
   - Goal
   - Pushable
+  - Movable
   layers:
   - Default
   - TransparentFX

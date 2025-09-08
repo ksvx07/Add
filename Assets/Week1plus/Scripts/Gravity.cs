@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Gravity : MonoBehaviour
 {
-    [SerializeField] private float gravitySpeed = 3f;
+    private float gravitySpeed = 6f;
     [SerializeField] private float rayLength = 0.6f;
     private float stepUnit = 0.5f;
 

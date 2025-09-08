@@ -45,27 +45,6 @@ public class GridMovement : MonoBehaviour
         }
     }
 
-    //IEnumerator Move(Vector3 direction)
-    //{
-    //    isMoving = true;
-    //    gravity?.EnableGravity(false);
-
-    //    Vector3 start = transform.position;
-    //    Vector3 end = start + direction * gridSize;
-
-    //    float elapsedTime = 0f;
-    //    while (elapsedTime < 1f)
-    //    {
-    //        transform.position = Vector3.Lerp(start, end, elapsedTime);
-    //        elapsedTime += Time.deltaTime * moveSpeed;
-    //        yield return null;
-    //    }
-
-    //    transform.position = end; // º¸Á¤
-    //    isMoving = false;
-    //    gravity?.EnableGravity(true);
-    //}
-
     IEnumerator Move(Vector3 direction)
     {
         isMoving = true;

@@ -1,136 +1,207 @@
 using UnityEngine;
-using System.Collections;
+using UnityEngine.UIElements.Experimental;
 
 public class GridMovement : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public float gridSize = 1f;
-    private bool isMoving = false;
 
-    [SerializeField] private float jumpHeight = 1f;   // 점프 최대 높이
-    [SerializeField] private float jumpDuration = 0.5f; // 점프 시간
+    private Vector3 moveDir = Vector3.forward;
+    private Vector3 prePos = Vector3.zero;
+    private Animator animator;
+
     [SerializeField] private float moveDistance = 2f;  // 이동 거리 (2칸)
 
-    private bool isJumping = false;
-    private float elapsed = 0f;
-    private Vector3 startPos;
-    private Vector3 endPos;
-    private Gravity gravity;
+    [SerializeField] private float rayMaxDis = 0.6f;
 
     [SerializeField] private Transform roomPivot;
 
+    private bool dashReady;
+    private float dashRayMaxDis = 5.0f;
+    private bool dashing;
+    private Vector3 dashPos = Vector3.zero;
+    [SerializeField] private float dashSpeed = 5.0f;
+
     void Awake()
     {
-        gravity = GetComponent<Gravity>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        if (!isMoving && !isJumping)
+        // MoveRay 그린거임 필요없으면 지우셈
+        //Debug.DrawRay(transform.position + new Vector3(0f, 0.25f, 0f), transform.forward * rayMaxDis, Color.red);
+        //Debug.DrawRay(transform.position - new Vector3(0f, 0.25f, 0f), transform.forward * rayMaxDis, Color.red);
+        //Debug.DrawRay(transform.position + new Vector3(0f, 0.75f, 0f), transform.forward * rayMaxDis, Color.red);
+
+        if (!GameManager2.instance.busy)
         {
-            if (Input.GetKeyDown(KeyCode.W)) StartCoroutine(Move(Vector3.forward));
-            if (Input.GetKeyDown(KeyCode.S)) StartCoroutine(Move(Vector3.back));
-            if (Input.GetKeyDown(KeyCode.A)) StartCoroutine(Move(Vector3.left));
-            if (Input.GetKeyDown(KeyCode.D)) StartCoroutine(Move(Vector3.right));
+            if (Input.GetKeyDown(KeyCode.W)) Move(0);
+            if (Input.GetKeyDown(KeyCode.S)) Move(180);
+            if (Input.GetKeyDown(KeyCode.A)) Move(270);
+            if (Input.GetKeyDown(KeyCode.D)) Move(90);
+
+            if (Input.GetKeyDown(KeyCode.E)) ReadyDash();
         }
-
-        if (!isJumping && Input.GetKeyDown(KeyCode.Space))
+        else
         {
-            StartJump();
-        }
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            ReverseRoom();
-        }
-    }
-
-    IEnumerator Move(Vector3 direction)
-    {
-        isMoving = true;
-        gravity?.EnableGravity(false);
-
-        Vector3 start = transform.position;
-        Vector3 end = start + direction * gridSize;
-
-        // 레이캐스트로 Pushable 체크
-        RaycastHit hit;
-        GameObject pushable = null;
-        if (Physics.Raycast(start, direction, out hit, gridSize))
-        {
-            if (hit.collider.CompareTag("Pushable"))
+            if (dashReady)
             {
-                pushable = hit.collider.gameObject;
+                if (Input.GetKeyDown(KeyCode.W)) Dash(0);
+                if (Input.GetKeyDown(KeyCode.S)) Dash(180);
+                if (Input.GetKeyDown(KeyCode.A)) Dash(270);
+                if (Input.GetKeyDown(KeyCode.D)) Dash(90);
             }
         }
 
-        Vector3 pushableStart = Vector3.zero;
-        Vector3 pushableEnd = Vector3.zero;
-        if (pushable != null)
+        if (dashing)
         {
-            pushableStart = pushable.transform.position;
-            pushableEnd = pushableStart + direction * gridSize;
-        }
-
-        float elapsedTime = 0f;
-        while (elapsedTime < 1f)
-        {
-            float t = elapsedTime;
-
-            transform.position = Vector3.Lerp(start, end, t);
-
-            if (pushable != null)
-            {
-                pushable.transform.position = Vector3.Lerp(pushableStart, pushableEnd, t);
-            }
-
-            elapsedTime += Time.deltaTime * moveSpeed;
-            yield return null;
-        }
-
-        transform.position = end; // 플레이어 위치 보정
-        if (pushable != null)
-            pushable.transform.position = pushableEnd; // Pushable 위치 보정
-
-        isMoving = false;
-        gravity?.EnableGravity(true);
-    }
-
-
-    void FixedUpdate()
-    {
-        if (!isJumping) return;
-
-        elapsed += Time.fixedDeltaTime;
-        float t = Mathf.Clamp01(elapsed / jumpDuration);
-
-        // 포물선 계산: y = -4h*(t-0.5)^2 + h
-        float y = (-4f * jumpHeight * (t - 0.5f) * (t - 0.5f) + jumpHeight);
-
-        Vector3 targetPos = Vector3.Lerp(startPos, endPos, t);
-        targetPos.y += y;
-
-        transform.position = targetPos;
-
-        if (t >= 1f)
-        {
-            isJumping = false;
-            gravity?.EnableGravity(true); // 점프 끝나면 중력 켬
+            CheckDashing();
+            ImDashing();
         }
     }
 
-    void StartJump()
+    private void CheckDashing()
     {
-        isJumping = true;
-        elapsed = 0f;
-        gravity?.EnableGravity(false);
-
-        startPos = transform.position;
-        endPos = startPos + transform.forward * moveDistance;
+        if (Vector3.Distance(transform.position, dashPos) < 0.001f)
+        {
+            transform.position = dashPos;
+            DashEnd();
+        }
+    }
+    private void ImDashing()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, dashPos, dashSpeed * Time.deltaTime);
     }
 
-    void ReverseRoom()
+    private void ReadyDash()
     {
-        roomPivot.Rotate(new Vector3(0f, 0f, 180f));
+        GameManager2.instance.StartAction();
+        GameManager2.instance.EnableGravity(false);
+        dashReady = true;
+    }
+
+    private void Dash(int dashDirRot)
+    {
+        Vector3 dashDir = dashDirRot switch
+        {
+            0 => Vector3.forward,
+            180 => Vector3.back,
+            270 => Vector3.left,
+            90 => Vector3.right,
+            _ => Vector3.forward
+        };
+        // 여기서 방향 잡아주고 아래에서 레이 쏴서 가능한지 확인
+        Vector3 euler = transform.rotation.eulerAngles;
+        euler.y = dashDirRot;  // z만 변경
+        transform.rotation = Quaternion.Euler(euler);
+
+        float dashDistance = FindDashDis();
+
+        dashDistance -= 0.5f;
+        dashDistance = Mathf.Round(dashDistance);
+
+
+        if (dashDistance == 0)
+        {
+            Blocked();// 벽박은 애니메이션
+            DashEnd();
+        }
+        else
+        {
+            dashReady = false;
+            dashPos = transform.position + dashDir * dashDistance;
+            dashing = true;
+
+        }
+    }
+    
+    private void DashEnd()
+    {
+        dashReady = false;
+        dashing = false;
+        GameManager2.instance.EnableGravity(true);
+        GameManager2.instance.EndAction();
+    }
+
+    private float FindDashDis()
+    {
+        float dashDistance = dashRayMaxDis;
+        Vector3 pos = transform.position;
+        Vector3 upRayPos = pos + new Vector3(0f, 0.25f, 0f);
+        Vector3 downRayPos = pos - new Vector3(0f, 0.25f, 0f);
+        if (Physics.Raycast(upRayPos, transform.forward, out RaycastHit hit, dashRayMaxDis))
+            dashDistance = hit.distance;
+        if (Physics.Raycast(downRayPos, transform.forward, out hit, dashRayMaxDis))
+            if (hit.distance < dashDistance)
+                dashDistance = hit.distance;
+
+        return dashDistance;
+    }
+
+    private bool MoveRay()
+    {
+        Vector3 pos = transform.position;
+        Vector3 upRayPos = pos + new Vector3(0f, 0.25f, 0f);
+        Vector3 downRayPos = pos - new Vector3(0f, 0.25f, 0f);
+        Vector3 topFrontRayPos = pos + new Vector3(0f, 0.75f, 0f);
+
+        if (Physics.Raycast(upRayPos, transform.forward, rayMaxDis) 
+            || Physics.Raycast(downRayPos, transform.forward, rayMaxDis)
+            || Physics.Raycast(topFrontRayPos, transform.forward, rayMaxDis)
+            || Physics.Raycast(pos, Vector3.up, rayMaxDis))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    private void Move(int moveDirRot)
+    {
+        moveDir = moveDirRot switch
+        {
+            0 => Vector3.forward,
+            180 => Vector3.back,
+            270 => Vector3.left,
+            90 => Vector3.right,
+            _ => Vector3.forward
+        };
+        // 여기서 방향 잡아주고 아래에서 레이 쏴서 가능한지 확인
+        Vector3 euler = transform.rotation.eulerAngles;
+        euler.y = moveDirRot;  // z만 변경
+        transform.rotation = Quaternion.Euler(euler);
+
+        // 가능한지 확인
+        bool canMove = MoveRay();
+
+        if (canMove)
+        {
+            prePos = transform.position;
+            animator.SetTrigger("Forward");
+            GameManager2.instance.StartAction();
+            GameManager2.instance.EnableGravity(false);
+        }
+        else
+        {
+            Blocked();
+            Debug.Log("Can't move");
+        }
+    }
+    
+    public void MoveEnd()
+    {
+        animator.Play("Nothing");
+        prePos += moveDir;
+        transform.position = prePos;
+        GameManager2.instance.EndAction();
+        GameManager2.instance.EnableGravity(true);
+    }
+
+    public void Blocked()
+    {
+        // Add Blocked animation
     }
 }

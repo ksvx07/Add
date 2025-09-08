@@ -4,26 +4,58 @@ public class Gravity : MonoBehaviour
 {
     [SerializeField] private float gravitySpeed = 3f;
     [SerializeField] private float rayLength = 0.6f;
-    [SerializeField] private LayerMask groundLayer;
+    private float stepUnit = 0.5f;
 
-    private bool gravityEnabled = true;
+    //private bool gravityEnabled = true;
+    private bool isFalling = false;
+    private Vector3 targetPos = Vector3.zero;
 
-    public bool IsGrounded { get; private set; }
+    private bool IsGrounded;
 
     private void Update()
     {
-        if (!gravityEnabled) return;
+        //Debug.DrawRay(transform.position, Vector3.down* rayLength, Color.blue);
 
-        ApplyGravity();
+        if (!GameManager2.instance.gravityEnabled) return;
+        if (!isFalling)
+        {
+            ApplyGravity();
+        }
+        else
+        {
+            fall();
+            checkFalling();
+        }
+
+        
     }
 
     private void ApplyGravity()
     {
-        IsGrounded = Physics.Raycast(transform.position, Vector3.down, rayLength, groundLayer);
+        IsGrounded = Physics.Raycast(transform.position, Vector3.down, rayLength);
 
         if (!IsGrounded)
-            transform.position += Vector3.down * gravitySpeed * Time.deltaTime;
+        {
+            targetPos = transform.position + Vector3.down * stepUnit;
+            isFalling = true;
+            GameManager2.instance.StartAction();
+        }
+            //transform.position += Vector3.down * gravitySpeed * Time.deltaTime;
     }
 
-    public void EnableGravity(bool enable) => gravityEnabled = enable;
+    private void fall()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, targetPos, gravitySpeed * Time.deltaTime);
+    }
+
+    private void checkFalling()
+    {
+        if (Vector3.Distance(transform.position, targetPos) < 0.001f)
+        {
+            transform.position = targetPos;
+            isFalling = false;
+            GameManager2.instance.EndAction();
+        }
+    }
+
 }

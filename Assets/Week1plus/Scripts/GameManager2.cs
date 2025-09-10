@@ -70,7 +70,7 @@ public class GameManager2 : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Q)) keyQ = true;
         else if (Input.GetKeyDown(KeyCode.E)) keyE = true;
         else if (Input.GetKeyDown(KeyCode.R)) keyR = true;
-        //else if (Input.GetKeyDown(KeyCode.T)) keyT = true;
+        else if (Input.GetKeyDown(KeyCode.T)) keyT = true;
 
         //Debug.Log(actionsInProgress);
         if (GameManager2.instance.keyT)
